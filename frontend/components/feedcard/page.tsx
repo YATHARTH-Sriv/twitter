@@ -7,23 +7,28 @@ import { IoMdShare } from "react-icons/io";
 
 const Feedcard:React.FC=()=>{
   return (
-    <div className=" grid grid-cols-12">
-    <div className=" border-b-2 pr-1 p-2 col-span-1">
-              <Image className="rounded-lg mt-3 ml-1  " src={"https://pbs.twimg.com/profile_images/1712361350142541824/kb8_UNI6_400x400.jpg"} height={40} width={40} alt="profile image"/>
-            </div>
-            <div className="  col-span-11">
-            <div className=" font-bold p-2 mt-2">Harsha Bhogle</div>
-            <p>This is going to be a test for RCBTweets get 230+. They have set the pace most times. Will be good to see how they react to the boot being on the other foot
-            </p>
-            <div className='p-2 border-b-2 flex justify-evenly'>
-            <LiaCommentsSolid />
-            <LiaRetweetSolid />
-            <FaRegHeart />
-            <IoMdShare />
-            </div>
-            </div>
-    </div>
+    
+    <div id="feed" className=" border-t-2   border-r-2 border-l-2 col-span-6 text-white">
+          <div className=" flex mt-3 ml-1  p-2 m-3">
+             <div className=" col-span-1">
+              <Image src={"https://pbs.twimg.com/profile_images/1395709971229196296/FFQTxazi_400x400.jpg"} height={50} width={50} alt="profile image" className=" rounded-xl"/>
+             </div>
+             <div className=" ml-1 col-span-11">AFC AJAX FC 
+             <div>Pochettino after the 3-2 goal in minute 94 has been DISALLOWED</div>
+             <Image src={"https://pbs.twimg.com/media/GMMz_zlWEAEvmrl?format=jpg&name=large"} className=" mt-2 rounded-xl" height={600} width={600} alt="image"/>
+             <div className='flex'>
+             <LiaRetweetSolid />
+             <LiaCommentsSolid />
+             <FaRegHeart />
+             <IoMdShare />
+             </div>
+             </div>
+
+          </div>
+          
+        </div>
   )
 }
 
 export default Feedcard
+
