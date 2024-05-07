@@ -5,6 +5,7 @@ import {expressMiddleware} from '@apollo/server/express4'
 import bodyParser, { BodyParser } from 'body-parser'
 import { User } from './user'
 
+
 async function serverinit(){
 
 
@@ -12,19 +13,20 @@ const app=express()
 const server=new ApolloServer({
     typeDefs:`
     ${User.type}
+    
     type Query{
         ${User.queries}
     }
     `,resolvers:{
            Query:{
             ...User.resolvers
-           }
+           },
     },
 })
 app.use(bodyParser.json())
 app.use(cors())
 await server.start()
-app.use("/graphql",expressMiddleware(server))
+app.use("/graphql", expressMiddleware(server as unknown as ApolloServer))
 
 app.get('/',(req,res)=>{
     res.send("hello from server")

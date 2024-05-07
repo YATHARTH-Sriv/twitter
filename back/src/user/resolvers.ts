@@ -31,8 +31,7 @@ export const resolvers={
 
         const {data}=await axios.get<GoogleTokenResult>(googleOauthURL.toString())
         console.log(data)
-        
-        const prisma = new PrismaClient()
+        const prisma=new PrismaClient({ log: ["query"] });
         const user= await prisma.user.findUnique({ 
             where:{email:data.email as string}
         })
@@ -47,8 +46,6 @@ export const resolvers={
                     }
             })
         }
-
-        try {
             const presentuser=await prisma.user.findUnique({
                 where:{email:data.email as string}
             })
@@ -56,11 +53,9 @@ export const resolvers={
                 const generatedtoken=JWTservice.generatewebtoken(presentuser)
                 return generatedtoken
             }
-        } catch (error:any) {
-            throw new error
-        }
 
         
         
     }
+    
 }

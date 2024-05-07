@@ -5,4 +5,5 @@ type User{
     lastname:String!
     email:String!
     profileimageURL:String
+    
 }`

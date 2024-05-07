@@ -1,4 +1,6 @@
 'use client';
+import React  from "react";
+import { useCallback } from "react";
 import Image from "next/image";
 import { LiaCommentsSolid } from "react-icons/lia";
 import { LiaRetweetSolid } from "react-icons/lia";
@@ -10,12 +12,12 @@ import { FaHashtag } from "react-icons/fa";
 import { FaBell } from "react-icons/fa6";
 import { FaEnvelope } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
-import { FcGoogle } from "react-icons/fc";
 import { FaRegImage } from "react-icons/fa6";
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import toast from "react-hot-toast";
+import { graphqlclient } from "../../client/api";
+import { verifygoogletokenQuery } from "../../graphql/query/user";
 
-import React  from "react";
-import { signIn } from "next-auth/react";
-import { useCallback } from "react";
 
 interface navigationicons{
   title:string,
@@ -52,14 +54,18 @@ export default function Home() {
     },
     [],
   )
+  const handlegoogletoken = useCallback(async (cred: CredentialResponse) => {
+    const googletoken = cred.credential;
+    if (!googletoken) return toast.error("user not logged in");
+    const { verifygoogletoken } = await graphqlclient.request(verifygoogletokenQuery, { token: googletoken });
+    toast.success("user logged in");
+    console.log(verifygoogletoken);
+    if(verifygoogletoken){
+      window.localStorage.setItem("twitter_token",verifygoogletoken)
+    }
+  }, []);
+
   
-  const googleLogin = async () => {
-    await signIn("google", {
-      callbackUrl: '/',
-      
-      redirect: true
-    });
-  };
   return (
   
     <div id="main" >
@@ -144,17 +150,11 @@ export default function Home() {
           </div>
         </div>
         <div id="sidebar" className=" col-span-3 ">
-          <div className=" hover:cursor-pointer text-xl ml-3  bg-white mt-3 rounded-lg p-2 w-fit flex text-black">
-          <button
-                type="button"
-                onClick={googleLogin}
-                
-              ><FcGoogle className=" hover:cursor-pointer text-3xl " /></button>
-              Sign with Google
-              
-          </div>
+              <div className=" hover:cursor-pointer text-xl  mt-3 rounded-lg p-2 w-fit flex text-white">
+                    <button className=" text-white bg-slate-500"><GoogleLogin onSuccess={handlegoogletoken}/></button>
+                  </div>
         </div>
-
+        
       </div>
       
     </div>
