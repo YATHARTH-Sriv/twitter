@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, User } from '@prisma/client'
 import axios from 'axios'
 import JWTservice from '../helpers/jwt'
+import { Graphqlcontext } from '../interface'
 
 interface GoogleTokenResult{
     iss?:String,
@@ -22,8 +23,8 @@ interface GoogleTokenResult{
     typ?:String,
 }
 
-
-export const resolvers={
+const prisma=new PrismaClient({ log: ["query"] });
+ const queries={
     verifygoogletoken:async(parent:any,{token}:{token:string})=>{
         const googletoken=token
         const googleOauthURL=new URL("https://oauth2.googleapis.com/tokeninfo")
@@ -31,9 +32,9 @@ export const resolvers={
 
         const {data}=await axios.get<GoogleTokenResult>(googleOauthURL.toString())
         console.log(data)
-        const prisma=new PrismaClient({ log: ["query"] });
+        
         const user= await prisma.user.findUnique({ 
-            where:{email:data.email as string}
+            where:{ email:data.email as string}
         })
 
         if(!user){
@@ -56,6 +57,21 @@ export const resolvers={
 
         
         
+    },
+    getCurrentUser:async(parent:any,arg:any,ctx: Graphqlcontext)=>{
+        const id=ctx.user?.id
+        if(!id) return null
+        
+        const user= await prisma.user.findUnique({ where:{ id } })
+        return user
     }
     
 }
+
+const extraresolvers={
+    User:{
+        tweets:(parent: User)=> prisma.tweet.findMany({ where: { author: { id: parent.id } } })
+    }
+}
+
+export const resolvers={queries,extraresolvers}

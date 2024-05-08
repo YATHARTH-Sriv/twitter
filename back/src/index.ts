@@ -4,29 +4,50 @@ import { ApolloServer } from '@apollo/server'
 import {expressMiddleware} from '@apollo/server/express4'
 import bodyParser, { BodyParser } from 'body-parser'
 import { User } from './user'
+import {Tweet} from "./tweet"
+import { Graphqlcontext } from './interface'
+import JWTservice from './helpers/jwt'
 
 
 async function serverinit(){
 
 
 const app=express()
-const server=new ApolloServer({
+const server=new ApolloServer<Graphqlcontext>({
     typeDefs:`
     ${User.type}
+    ${Tweet.types}
     
     type Query{
-        ${User.queries}
+        ${User.queries},
+        ${Tweet.queries}
     }
-    `,resolvers:{
+    type Mutation{
+       ${Tweet.mutation}
+    }
+    `,
+    resolvers:{
            Query:{
-            ...User.resolvers
+            ...User.resolvers.queries,
+            ...Tweet.resolvers.queries
            },
+           Mutation:{
+            ...Tweet.resolvers.mutations
+           },
+           ...Tweet.resolvers.extraresolvers,
+           ...User.resolvers.extraresolvers
+
     },
 })
 app.use(bodyParser.json())
 app.use(cors())
 await server.start()
-app.use("/graphql", expressMiddleware(server as unknown as ApolloServer))
+app.use("/graphql", expressMiddleware(server as unknown as ApolloServer,{
+    context:async({req,res})=>{
+        return {
+            user: req.headers.authorization ? JWTservice.decodetoken(req.headers.authorization):undefined
+        }
+    }}))
 
 app.get('/',(req,res)=>{
     res.send("hello from server")

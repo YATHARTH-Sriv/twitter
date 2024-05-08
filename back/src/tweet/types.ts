@@ -1,11 +1,11 @@
 export const types=`
 
 input createtweetdata{
-    content:String!,
-    imageURL:String
+    content: String!,
+    imageURL: String
 }
 
-type tweet{
+type Tweet{
     id: String!
     content:String!
     imageURL:String

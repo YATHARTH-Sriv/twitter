@@ -16,7 +16,8 @@ import { FaRegImage } from "react-icons/fa6";
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import toast from "react-hot-toast";
 import { graphqlclient } from "../../client/api";
-import { verifygoogletokenQuery } from "../../graphql/query/user";
+import { getCurrentUserQuery, verifygoogletokenQuery } from "../../graphql/query/user";
+import { useCurrentUser } from "../../hooks/user";
 
 
 interface navigationicons{
@@ -61,9 +62,17 @@ export default function Home() {
     toast.success("user logged in");
     console.log(verifygoogletoken);
     if(verifygoogletoken){
-      window.localStorage.setItem("twitter_token",verifygoogletoken)
+       window.localStorage.setItem("twitter_token",verifygoogletoken)
     }
+    
+    
   }, []);
+
+  const user= useCurrentUser
+  console.log(user)
+  
+  
+  
 
   
   return (
@@ -81,6 +90,7 @@ export default function Home() {
             </li>)
           )}
         </ul>
+         <h1>dnw</h1>
         <button className="  flex p-4 justify-center mb-2 ml-8 hover:bg-blue-800 rounded-lg h-fit w-80 text-2xl bg-blue-600">Tweet</button>
         </div>
         <div id="feed" className=" overflow-y-auto  border-t-2   border-r-2 border-l-2 col-span-6 text-white">

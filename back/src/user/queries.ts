@@ -1,2 +1,4 @@
 export const queries=`
-verifygoogletoken(token:String!):String`
+verifygoogletoken(token:String!):String
+getCurrentUser: User
+`
