@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { ApolloServer } from '@apollo/server'
 import {expressMiddleware} from '@apollo/server/express4'
-import bodyParser, { BodyParser } from 'body-parser'
+import bodyParser from 'body-parser'
 import { User } from './user'
 import {Tweet} from "./tweet"
 import { Graphqlcontext } from './interface'
@@ -29,7 +29,7 @@ const server=new ApolloServer<Graphqlcontext>({
     resolvers:{
            Query:{
             ...User.resolvers.queries,
-            ...Tweet.resolvers.queries
+            ...Tweet.resolvers.queries,
            },
            Mutation:{
             ...Tweet.resolvers.mutations
@@ -44,9 +44,8 @@ app.use(cors())
 await server.start()
 app.use("/graphql", expressMiddleware(server as unknown as ApolloServer,{
     context:async({req,res})=>{
-        return {
-            user: req.headers.authorization ? JWTservice.decodetoken(req.headers.authorization):undefined
-        }
+        return { user:  req.headers.authorization ? JWTservice.decodetoken(req.headers.authorization) : null}
+        
     }}))
 
 app.get('/',(req,res)=>{

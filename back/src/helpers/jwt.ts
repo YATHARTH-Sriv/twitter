@@ -9,11 +9,15 @@ class JWTservice{
         id: user?.id
     }
     const token=jwt.sign(payload,process.env.JWT_SECRET as string)
-    return token
+    return token 
    }
 
    public static decodetoken(token:string){
-    return jwt.verify(token,process.env.JWT_SECRET as string) as Jwtuser
+    try {
+        return jwt.verify(token,process.env.JWT_SECRET as string) as Jwtuser
+    } catch (error) {
+        return null
+    }
    }
 }
 

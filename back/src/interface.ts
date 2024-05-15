@@ -1,6 +1,6 @@
 
 export interface Jwtuser{
-    id: string,
+    id: string
     email: string
 }
 

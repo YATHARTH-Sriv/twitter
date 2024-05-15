@@ -1,17 +1,20 @@
 "use client"
-import { ReactNode } from "react";
-import { QueryClient, QueryClientProvider } from "react-query"
-import { ReactQueryDevtools } from 'react-query/devtools'
 
-const queryclient=new QueryClient();
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ReactNode, useState } from "react";
+import  { Toaster } from "react-hot-toast";
 
-export const ReactQueryClientProvider = ({children}:{children:ReactNode}) => {
+
+
+
+export default function Provider({ children }:{ children : ReactNode }){
+    const [queryClient] = useState(()=> new QueryClient())
     return (
-        <QueryClientProvider client={queryclient}>
-        {/* <ReactQueryDevtools/> */}
+        <QueryClientProvider client={queryClient}>
+            <Toaster/>
+            <ReactQueryDevtools initialIsOpen={false} />
             {children}
         </QueryClientProvider>
-    );
-}
-
-
+    )
+} 

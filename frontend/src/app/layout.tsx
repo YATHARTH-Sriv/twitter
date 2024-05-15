@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { ReactQueryClientProvider } from "../../components/reactquery";
+import Provider from "../../components/reactquery";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +19,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ReactQueryClientProvider>
+    
     <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID ?? ''}>
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" style={{backgroundColor: 'black'}}>
+      <body className={inter.className}>
+      <Provider>
+        {children}
+      </Provider>
+      </body>
     </html>
+  
     </GoogleOAuthProvider>
-    </ReactQueryClientProvider>
+    
   );
 }

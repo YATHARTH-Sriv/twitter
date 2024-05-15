@@ -26,12 +26,16 @@ interface GoogleTokenResult{
 const prisma=new PrismaClient({ log: ["query"] });
  const queries={
     verifygoogletoken:async(parent:any,{token}:{token:string})=>{
-        const googletoken=token
-        const googleOauthURL=new URL("https://oauth2.googleapis.com/tokeninfo")
-        googleOauthURL.searchParams.set("id_token",googletoken)
+        const googleToken = token;
+        const googleOauthURL = new URL("https://oauth2.googleapis.com/tokeninfo");
+        googleOauthURL.searchParams.set("id_token", googleToken);
 
-        const {data}=await axios.get<GoogleTokenResult>(googleOauthURL.toString())
-        console.log(data)
+        const { data } = await axios.get<GoogleTokenResult>(
+            googleOauthURL.toString(),
+            {
+              responseType: "json",
+            }
+          );
         
         const user= await prisma.user.findUnique({ 
             where:{ email:data.email as string}
@@ -47,14 +51,15 @@ const prisma=new PrismaClient({ log: ["query"] });
                     }
             })
         }
-            const presentuser=await prisma.user.findUnique({
-                where:{email:data.email as string}
-            })
-            if(presentuser){
-                const generatedtoken=JWTservice.generatewebtoken(presentuser)
-                return generatedtoken
-            }
-
+        const userInDb = await prisma.user.findUnique({
+            where: { email: data.email as string },
+          });
+      
+          if (!userInDb) throw new Error("User with email not found");
+      
+          const userToken = JWTservice.generatewebtoken(userInDb);
+      
+          return userToken;
         
         
     },
@@ -62,9 +67,10 @@ const prisma=new PrismaClient({ log: ["query"] });
         const id=ctx.user?.id
         if(!id) return null
         
-        const user= await prisma.user.findUnique({ where:{ id } })
+        const user= await prisma.user.findUnique({ where: { id } })
         return user
-    }
+    },
+    getuserbyid:async(parent:any,{id}:{id: string},ctx: Graphqlcontext)=> await prisma.user.findUnique({ where: { id }})
     
 }
 
