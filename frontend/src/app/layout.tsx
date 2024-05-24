@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     
-    <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID ?? ''}>
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ''}>
     <html lang="en" style={{backgroundColor: 'black'}}>
       <body className={inter.className}>
       <Provider>
