@@ -5,6 +5,7 @@ import { LiaRetweetSolid } from "react-icons/lia";
 import { FaRegHeart } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
 import { Tweet } from '../../gql/graphql';
+import Link from 'next/link';
 
 interface FeedcardPayload{
   data: Tweet
@@ -21,7 +22,9 @@ const Feedcard:React.FC<FeedcardPayload>=(props)=>{
             alt="profile image"
             className=" rounded-xl"/>}
              </div>
-             <div className=" ml-1 col-span-11">{data.author?.firstname} {data.author?.lastname}
+             <div className=" ml-1 col-span-11">
+              <Link href={`/${data.id}`}>{data.author?.firstname} {data.author?.lastname}
+              </Link>
              <div>{data.content}</div>
              {data.imageURL && <Image src={data.imageURL}
               className=" mt-2 rounded-xl"

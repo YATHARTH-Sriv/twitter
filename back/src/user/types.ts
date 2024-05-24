@@ -6,4 +6,5 @@ type User{
     email: String!
     profileimageURL: String
     tweets: [Tweet]
+   
 }`

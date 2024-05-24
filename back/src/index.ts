@@ -24,6 +24,7 @@ const server=new ApolloServer<Graphqlcontext>({
     }
     type Mutation{
        ${Tweet.mutation}
+      
     }
     `,
     resolvers:{

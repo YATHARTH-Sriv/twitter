@@ -62,7 +62,7 @@ export default function Home() {
     {
       title: "Profile",
       icon: <CgProfile />,
-      link: "/profile"
+      link: `/${user?.id}`
     }
   ], [user?.id]);
   const queryClient= useQueryClient()

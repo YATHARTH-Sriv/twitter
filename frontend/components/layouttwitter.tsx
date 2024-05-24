@@ -54,7 +54,7 @@ const Layouttwitter:React.FC<TwitterLayoutProps>=(props)=>{
     {
       title: "Profile",
       icon: <CgProfile />,
-      link: "/profile"
+      link: `/${user?.id}`
     }
   ], [user?.id]);
     
@@ -80,9 +80,9 @@ const Layouttwitter:React.FC<TwitterLayoutProps>=(props)=>{
         <ul className="  flex-row mt-1 text-xl pl-3 ml-4">
           {navigation.map(items=>
             (<li key={items.title} className="    flex gap-4 hover:bg-gray-800 rounded-md px-3 py-3 w-fit h-fit ">
-              {/* <Link href={items.link} className=" flex gap-4 "> */}
+              <Link href={items.link} className=" flex gap-4 ">
               <p className="text-3xl">{items.icon}</p><p className=" text-2xl">{items.title}</p>
-              {/* </Link> */}
+              </Link>
             </li>)
           )}
         </ul>
